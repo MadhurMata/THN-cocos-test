@@ -8,22 +8,20 @@ import Footer from '../components/Footer'
 
 export default class Home extends Component {
   state = {
-    booking: {}
+    booking: {},
   }
 
   handleBooking = (booking) => {
     this.setState({ booking })
-
   }
+
   render() {
-    const { booking } = this.state
     return (
       <div className="room-and-rates">
         <Nav />
         <Engine handleBooking={this.handleBooking}/>
-        <Main manageBooking={booking}/>
+        <Main summary={this.state.booking}/>
         <Footer />
-
       </div>
     )
   }

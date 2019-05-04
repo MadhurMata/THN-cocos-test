@@ -21,7 +21,7 @@ export default class Engine extends Component {
     const tomorrowDateFormated = tomorrowDate.getDate()+'/'+(tomorrowDate.getMonth()+1)+'/'+tomorrowDate.getFullYear();
     this.setState({
       checkIn: todayDateFormated,
-      checkOut: tomorrowDateFormated
+      checkout: tomorrowDateFormated
     });
   };
 
@@ -31,8 +31,8 @@ export default class Engine extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const { checkIn, checkOut, adults } = this.state;
-    if (!checkIn || !checkOut || !adults){
+    const { checkIn, checkout, adults } = this.state;
+    if (!checkIn || !checkout || !adults){
       this.setState({ isMissingFields: true });
     } else {
       this.props.handleBooking(this.state);
@@ -43,7 +43,7 @@ export default class Engine extends Component {
   };
 
   render() {
-    const { checkIn, checkOut, isMissingFields } = this.state;
+    const { checkIn, checkout, isMissingFields } = this.state;
     return (
       <div className="engine text-center">
 
@@ -63,7 +63,7 @@ export default class Engine extends Component {
 
               <div className="form-group">
                   <div className="input-group date" data-date-format="dd/mm/yyyy">
-                      <input id="checkout" type="text" className="form-control" placeholder={checkOut} name="checkOut" onChange={this.handleChange} />
+                      <input id="checkout" type="text" className="form-control" placeholder={checkout} name="checkout" onChange={this.handleChange} />
                       <div className="input-group-addon" >
                           <span className="glyphicon glyphicon-calendar"></span>
                       </div>

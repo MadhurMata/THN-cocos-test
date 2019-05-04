@@ -4,7 +4,7 @@ export default class Card extends Component {
   render() {
       const { img, name, description, size, beds, people, price } = this.props
     return (
-      <div className="card clearfix pointer active">
+      <div className="card clearfix pointer active" onClick={()=>{this.props.handleClick(name, people, price)}}>
                 <div className="room-image">
                     <img src={img} width="100%" />
                 </div>

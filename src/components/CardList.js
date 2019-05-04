@@ -3,6 +3,11 @@ import React, { Component } from 'react'
 import Card from './Card'
 
 export default class CardList extends Component {
+
+  handleClick = (name, people, price) => {
+    this.props.cardInfo(name, people, price)
+  };
+
   render() {
     return (
       <div className="col-md-8 main">
@@ -14,6 +19,7 @@ export default class CardList extends Component {
           beds={1}
           people={2}
           price={350}
+          handleClick={this.handleClick}
         />
         <Card
           img="images/cocos/room_2.png" 
@@ -23,6 +29,8 @@ export default class CardList extends Component {
           beds={1}
           people={2}
           price={400}
+          handleClick={this.handleClick}
+
         />
         <Card 
           img="images/cocos/room_3.png"
@@ -32,6 +40,7 @@ export default class CardList extends Component {
           beds={3}
           people={4}
           price={600}
+          handleClick={this.handleClick}
         />
       </div>
     )
