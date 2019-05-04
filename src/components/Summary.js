@@ -60,7 +60,7 @@ export default class Summary extends Component {
                         </div>
                     </div>
 
-                    <Link href="#" className="btn btn-primary btn-group-justified">
+                    <Link to="#" className="btn btn-primary btn-group-justified">
                         Save
                     </Link>
                 </div>
