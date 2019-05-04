@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom';
 
 
 export default class Engine extends Component {
@@ -8,7 +7,22 @@ export default class Engine extends Component {
     checkout: "",
     adults: 0,
     children: 0,
-    isMissing: false
+    isMissingFields: false
+  };
+
+  componentDidMount () {
+    this.getDates();
+  };
+
+  getDates = () => {
+    const currentDate = new Date();
+    const todayDateFormated = currentDate.getDate()+'/'+(currentDate.getMonth()+1)+'/'+currentDate.getFullYear();
+    const tomorrowDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+    const tomorrowDateFormated = tomorrowDate.getDate()+'/'+(tomorrowDate.getMonth()+1)+'/'+tomorrowDate.getFullYear();
+    this.setState({
+      checkIn: todayDateFormated,
+      checkOut: tomorrowDateFormated
+    });
   };
 
   handleChange = event => { 
@@ -19,17 +33,17 @@ export default class Engine extends Component {
     event.preventDefault();
     const { checkIn, checkOut, adults } = this.state;
     if (!checkIn || !checkOut || !adults){
-      this.setState({ isMissing: true });
+      this.setState({ isMissingFields: true });
     } else {
       this.props.handleBooking(this.state);
       this.setState({
-        isMissing: false
-      })
-    }
-  }
+        isMissingFields: false
+      });
+    };
+  };
 
   render() {
-    const { isMissing } = this.state
+    const { checkIn, checkOut, isMissingFields } = this.state;
     return (
       <div className="engine text-center">
 
@@ -40,7 +54,7 @@ export default class Engine extends Component {
 
               <div className="form-group">
                   <div className="input-group date" data-date-format="dd/mm/yyyy">
-                      <input id="checkin" type="text" className="form-control" placeholder="Check in" name="checkIn" onChange={this.handleChange} />
+                      <input id="checkin" type="text" className="form-control" placeholder={checkIn} name="checkIn" onChange={this.handleChange} />
                       <div className="input-group-addon" >
                           <span className="glyphicon glyphicon-calendar"></span>
                       </div>
@@ -49,7 +63,7 @@ export default class Engine extends Component {
 
               <div className="form-group">
                   <div className="input-group date" data-date-format="dd/mm/yyyy">
-                      <input id="checkout" type="text" className="form-control" placeholder="Checkout" name="checkOut" onChange={this.handleChange} />
+                      <input id="checkout" type="text" className="form-control" placeholder={checkOut} name="checkOut" onChange={this.handleChange} />
                       <div className="input-group-addon" >
                           <span className="glyphicon glyphicon-calendar"></span>
                       </div>
@@ -93,7 +107,7 @@ export default class Engine extends Component {
             </form>
 
           </div>
-        {isMissing ? <p className="isMissing">Missing fill fields</p> : null }
+        {isMissingFields ? <p className="isMissing">Missing fill fields</p> : null }
         </div>
       </div>
     )
