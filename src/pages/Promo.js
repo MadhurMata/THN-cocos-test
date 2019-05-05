@@ -6,9 +6,10 @@ import Main from '../components/Main'
 import Footer from '../components/Footer'
 
 
-export default class Home extends Component {
+export default class Promo extends Component {
   state = {
     booking: {},
+    promo: "promo"
   }
 
   handleBooking = (booking) => {
@@ -16,13 +17,12 @@ export default class Home extends Component {
   }
 
   render() {
-    console.log('window.location.pathname', window.location.pathname)
 
     return (
       <div className="room-and-rates">
         <Nav />
         <Engine handleBooking={this.handleBooking}/>
-        <Main summary={this.state.booking}/>
+        <Main summary={this.state.booking} promo={this.state.promo}/>
         <Footer />
       </div>
     )

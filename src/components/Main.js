@@ -8,14 +8,16 @@ export default class Main extends Component {
   state = {
     cardName: "",
     cardPeople: "",
-    cardPrice: 0
+    cardPrice: 0,
+    pricePromo: 0
   };
 
-  handleCardInfo = (name, people, price) => {
+  handleCardInfo = (name, people, price, promo) => {
     this.setState({
       cardName: name,
       cardPeople: people,
-      cardPrice: price
+      cardPrice: price,
+      pricePromo: promo
     });
   };
 
@@ -31,7 +33,7 @@ export default class Main extends Component {
           <div className="col-md-4 sidebar-header"></div>
         </section>
         <section className="row">
-          <CardList cardInfo={this.handleCardInfo} />
+          <CardList cardInfo={this.handleCardInfo} promo={this.props.promo}/>
           <Summary summary={this.props.summary} cardInfo={this.state} />
         </section>
       </div>

@@ -17,16 +17,16 @@ export default class Summary extends Component {
             cardName: "",
             cardPrice: 0,
             totalPrice: 0,
-            numberOfNights: 0
+            numberOfNights: 0,
+            pricePromo: 0
         }
     };
 
     componentDidMount = () => {
-       if(!localStorage === undefined){
+       if(localStorage.length === 1){
             this.getInfo();  
-        }   
+        } 
     };
-
 
     handleNumberOfNights = event => {
         event.preventDefault();
@@ -34,12 +34,14 @@ export default class Summary extends Component {
     };
 
    totalPrice = () => {
-        const { numberOfNights, defaultPrice, cardPrice } = this.state;
+        const { cardPrice } = this.state.booking;
+        const { numberOfNights, defaultPrice } = this.state;
         const OneNightPrice = this.props.cardInfo.cardPrice;
-        if(localStorage === undefined){
-            return "€" + (numberOfNights * cardPrice)
-        } else if (OneNightPrice) {
-            return "€" + numberOfNights * OneNightPrice;
+
+        if(OneNightPrice){
+            return "€" + (numberOfNights * OneNightPrice)
+        } else if (localStorage.booking) {
+            return "€" + numberOfNights * cardPrice;
         } else if(numberOfNights === 1){
             return "€" + defaultPrice;
         }else{
@@ -50,8 +52,10 @@ export default class Summary extends Component {
 
     handleSaveInfo = () => {
         const {checkIn, checkout, adults, children} = this.props.summary;  
-        const {cardName, cardPrice } = this.props.cardInfo;
+        console.log('object', this.state.booking)
+        const {cardName, cardPrice, pricePromo } = this.props.cardInfo;
         const booking = {
+            pricePromo,
             checkIn,
             checkout,
             adults,
@@ -60,7 +64,8 @@ export default class Summary extends Component {
             cardPrice: cardPrice || this.state.defaultPrice,
             totalPrice: this.totalPrice(),
             numberOfNights: parseInt(this.state.numberOfNights)
-        }
+        };
+        
         if (!adults && !checkIn && !checkout){
             this.setState({ areMissingDates: true }); 
         } else {
@@ -73,30 +78,34 @@ export default class Summary extends Component {
         }
     };
 
+
     getInfo = () => {
         const storedInfo = JSON.parse(localStorage.getItem("booking"));
-        const { checkIn, checkout, adults, children, cardName, totalPrice, numberOfNights} = storedInfo;
+        const { cardPrice, checkIn, checkout, adults, children, cardName, totalPrice, numberOfNights} = storedInfo;
+        
         this.setState({
-            checkIn,
-            checkout,
-            adults,
-            children,
-            cardName,
-            totalPrice,
-            numberOfNights
+            numberOfNights,
+            booking: {
+                checkIn,
+                checkout,
+                adults,
+                children,
+                cardName,
+                totalPrice,
+                cardPrice,
+            }
         })
     }
 
     render() {
         const {
-            numberOfNights,
             cardName: cardNameLocalStorage,
             checkIn: checkInLocalStorage,
             checkout: checkoutLocalStorage,
             adults: adultsLocalStorage,
-            children: childrenLocalStorage,
-            areMissingDates
-        } = this.state;
+            children: childrenLocalStorage
+        } = this.state.booking;
+        const { numberOfNights, areMissingDates } = this.state
         const { summary, cardInfo } = this.props;
         const { checkIn, checkout, adults, children } = summary;
         const { cardName, cardPeople } = cardInfo;

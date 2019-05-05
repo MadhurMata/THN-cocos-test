@@ -3,12 +3,31 @@ import React, { Component } from 'react'
 import Card from './Card'
 
 export default class CardList extends Component {
+  state = {
+   discount: false,
+   promo: 0.9
+  }
+
+  componentDidMount() {
+    this.handlePromo()
+  }
+
+  handlePromo = () => {
+    const { promo } = this.props
+    if (promo){
+      this.setState({
+        discount: true,
+      }) 
+    }
+  }
 
   handleClick = (name, people, price) => {
+    
     this.props.cardInfo(name, people, price)
   };
 
   render() {
+    const {discount, promo} = this.state
     return (
       <div className="col-md-8 main">
         <Card
@@ -18,7 +37,7 @@ export default class CardList extends Component {
           size={25}
           beds={1}
           people={2}
-          price={350}
+          price={discount ? 350 * promo : 350}
           handleClick={this.handleClick}
         />
         <Card
@@ -28,7 +47,7 @@ export default class CardList extends Component {
           size={50}
           beds={1}
           people={2}
-          price={400}
+          price={discount ? 400 * promo : 400}
           handleClick={this.handleClick}
 
         />
@@ -39,7 +58,7 @@ export default class CardList extends Component {
           size={125}
           beds={3}
           people={4}
-          price={600}
+          price={discount ? 750 * promo : 750}
           handleClick={this.handleClick}
         />
       </div>

@@ -15,24 +15,24 @@ export default class Engine extends Component {
   };
 
   getDates = () => {
-    const storedInfo = JSON.parse(localStorage.getItem("booking"));
-    const { checkIn, checkout } = storedInfo;
     const currentDate = new Date();
     const todayDateFormated = currentDate.getDate()+'/'+(currentDate.getMonth()+1)+'/'+currentDate.getFullYear();
     const tomorrowDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
     const tomorrowDateFormated = tomorrowDate.getDate()+'/'+(tomorrowDate.getMonth()+1)+'/'+tomorrowDate.getFullYear();
-    if(localStorage === undefined){
+    if(localStorage.length === 0){
       this.setState({
         checkIn: todayDateFormated,
         checkout: tomorrowDateFormated
       });
     } else {
-        this.setState({
-          checkIn,
-          checkout
+      const storedInfo = JSON.parse(localStorage.getItem("booking"));
+      const { checkIn, checkout, adults } = storedInfo;
+      this.setState({
+        checkIn,
+        checkout,
+        adults
         });
     }
-    
   };
 
   handleChange = event => { 
@@ -42,6 +42,7 @@ export default class Engine extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const { checkIn, checkout, adults } = this.state;
+    
     if (!checkIn || !checkout || !adults){
       this.setState({ isMissingFields: true });
     } else {
@@ -53,7 +54,7 @@ export default class Engine extends Component {
   };
 
   render() {
-    const { checkIn, checkout, isMissingFields } = this.state;
+    const { checkIn, checkout, adults, children, isMissingFields } = this.state;
     return (
       <div className="engine text-center">
 
@@ -82,8 +83,8 @@ export default class Engine extends Component {
 
 
               <div className="form-group select-inline">
-                  <select className="form-control" placeholder="Adults" id="adults" defaultValue="Adults" name="adults" onChange={this.handleChange}>
-                      <option value="">Adults</option>
+                  <select className="form-control" placeholder="Adults" id="adults" defaultValue={"Adults"} name="adults" onChange={this.handleChange}>
+                      <option value="">{"Adults: " + adults}</option>
                       <option value="1">Adults: 1</option>
                       <option value="2">Adults: 2</option>
                       <option value="3">Adults: 3</option>
@@ -97,7 +98,7 @@ export default class Engine extends Component {
               </div>
               <div className="form-group select-inline">
                   <select className="form-control" placeholder="Children" id="children" defaultValue="Children" name="children" onChange={this.handleChange}>
-                      <option value="">Children</option>
+                      <option value="">{"Children: " + children}</option>
                       <option value="1">Children: 1</option>
                       <option value="2">Children: 2</option>
                       <option value="3">Children: 3</option>
@@ -117,7 +118,11 @@ export default class Engine extends Component {
             </form>
 
           </div>
-        {isMissingFields ? <p className="isMissing">Missing fill fields</p> : null }
+        {isMissingFields ? 
+        <div className="text-container">
+          <p className="isMissing">Missing fields</p> 
+        </div> 
+        : null }
         </div>
       </div>
     )
