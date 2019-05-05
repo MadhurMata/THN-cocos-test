@@ -8,6 +8,7 @@ export default class Summary extends Component {
     state = {
         numberOfNights: 1,
         defaultPrice: 350,
+        areMissingDates: false,
         booking: {
             checkIn: "",
             checkout: "",
@@ -24,34 +25,32 @@ export default class Summary extends Component {
        if(JSON.parse(localStorage.getItem("booking"))){
             this.getInfo();  
         }   
-    }
+    };
 
 
     handleNumberOfNights = event => {
         event.preventDefault();
-        this.setState({
-            numberOfNights: parseInt(event.target.value)
-        })
+        this.setState({ numberOfNights: parseInt(event.target.value)})
     };
 
    totalPrice = () => {
-        const { numberOfNights, defaultPrice, cardPrice } = this.state
-        const OneNightPrice = this.props.cardInfo.cardPrice
+        const { numberOfNights, defaultPrice, cardPrice } = this.state;
+        const OneNightPrice = this.props.cardInfo.cardPrice;
         if(localStorage === undefined){
             return "€" + (numberOfNights * cardPrice)
         } else if (OneNightPrice) {
-            return "€" + numberOfNights * OneNightPrice
+            return "€" + numberOfNights * OneNightPrice;
         } else if(numberOfNights === 1){
-            return "€" + defaultPrice
+            return "€" + defaultPrice;
         }else{
-            const totalPrice = numberOfNights * defaultPrice
-            return "€" + totalPrice
+            const totalPrice = numberOfNights * defaultPrice;
+            return "€" + totalPrice;
         }
-    }
+    };
 
     handleSaveInfo = () => {
         const {checkIn, checkout, adults, children} = this.props.summary;  
-        const {cardName, cardPrice } = this.props.cardInfo
+        const {cardName, cardPrice } = this.props.cardInfo;
         const booking = {
             checkIn,
             checkout,
@@ -62,15 +61,21 @@ export default class Summary extends Component {
             totalPrice: this.totalPrice(),
             numberOfNights: parseInt(this.state.numberOfNights)
         }
-        localStorage.setItem("booking", JSON.stringify(booking));
-        this.setState({
-            booking,
-        })
+        if (!adults && !checkIn && !checkout){
+            this.setState({ areMissingDates: true }); 
+        } else {
+            this.setState({ areMissingDates: false }); 
+            localStorage.setItem("booking", JSON.stringify(booking));
+            this.setState({
+                booking,
+            })
+
+        }
     };
 
     getInfo = () => {
-        const storedInfo = JSON.parse(localStorage.getItem("booking"))
-        const { checkIn, checkout, adults, children, cardName, totalPrice, numberOfNights} = storedInfo
+        const storedInfo = JSON.parse(localStorage.getItem("booking"));
+        const { checkIn, checkout, adults, children, cardName, totalPrice, numberOfNights} = storedInfo;
         this.setState({
             checkIn,
             checkout,
@@ -89,13 +94,13 @@ export default class Summary extends Component {
             checkIn: checkInLocalStorage,
             checkout: checkoutLocalStorage,
             adults: adultsLocalStorage,
-            children: childrenLocalStorage
-
-
-        } = this.state
+            children: childrenLocalStorage,
+            areMissingDates
+        } = this.state;
         const { summary, cardInfo } = this.props;
         const { checkIn, checkout, adults, children } = summary;
         const { cardName, cardPeople } = cardInfo;
+        
     return (
       <div className="col-md-4 sidebar">
 
@@ -140,13 +145,16 @@ export default class Summary extends Component {
                         }
                     </div>
 
-                    {adults || adultsLocalStorage ?  
-                    <div className="card-content">
-                        <p className="main">People</p>
-                        <p className="base" id="adults-summary">{adults || adultsLocalStorage || 2} Adults</p>
-                        <p className="base" id="children-summary">{children || childrenLocalStorage || 0} Children</p>
-                    </div> :
-                        <p className="main">{ cardPeople } People</p>
+                    {areMissingDates ?  
+                        <div>
+                            <p className="main">{ cardPeople } People</p>
+                            <p className="missing-dates">Missing Dates</p> 
+                        </div> :
+                        <div className="card-content">
+                            <p className="main">People</p>
+                            <p className="base" id="adults-summary">{adults || adultsLocalStorage || 2} Adults</p>
+                            <p className="base" id="children-summary">{children || childrenLocalStorage || 0} Children</p>
+                        </div> 
                     }
 
                     
