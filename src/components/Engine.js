@@ -15,14 +15,24 @@ export default class Engine extends Component {
   };
 
   getDates = () => {
+    const storedInfo = JSON.parse(localStorage.getItem("booking"));
+    const { checkIn, checkout } = storedInfo;
     const currentDate = new Date();
     const todayDateFormated = currentDate.getDate()+'/'+(currentDate.getMonth()+1)+'/'+currentDate.getFullYear();
     const tomorrowDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
     const tomorrowDateFormated = tomorrowDate.getDate()+'/'+(tomorrowDate.getMonth()+1)+'/'+tomorrowDate.getFullYear();
-    this.setState({
-      checkIn: todayDateFormated,
-      checkout: tomorrowDateFormated
-    });
+    if(localStorage === undefined){
+      this.setState({
+        checkIn: todayDateFormated,
+        checkout: tomorrowDateFormated
+      });
+    } else {
+        this.setState({
+          checkIn,
+          checkout
+        });
+    }
+    
   };
 
   handleChange = event => { 

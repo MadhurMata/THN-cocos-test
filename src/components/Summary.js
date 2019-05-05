@@ -22,7 +22,7 @@ export default class Summary extends Component {
     };
 
     componentDidMount = () => {
-       if(JSON.parse(localStorage.getItem("booking"))){
+       if(!localStorage === undefined){
             this.getInfo();  
         }   
     };
@@ -100,7 +100,7 @@ export default class Summary extends Component {
         const { summary, cardInfo } = this.props;
         const { checkIn, checkout, adults, children } = summary;
         const { cardName, cardPeople } = cardInfo;
-        
+
     return (
       <div className="col-md-4 sidebar">
 
