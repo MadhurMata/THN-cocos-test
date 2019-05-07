@@ -38,7 +38,6 @@ export default class Main extends Component {
         </section>
       </div>
     )
-
   }
    
 }

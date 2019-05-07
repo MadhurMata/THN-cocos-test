@@ -58,7 +58,7 @@ export default class CardList extends Component {
           size={125}
           beds={3}
           people={4}
-          price={discount ? 750 * promo : 750}
+          price={discount ? 600 * promo : 600}
           handleClick={this.handleClick}
         />
       </div>
